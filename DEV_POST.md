@@ -28,18 +28,18 @@ So this weekend, I built **PlateMate**:
 
 Here is the ingredient scanner in action, catching hidden barley malt and tree nuts on a granola bar label:
 
-![PlateMate Ingredient Scanner Demo](assets/scanner_demo.jpg)
+![PlateMate Ingredient Scanner Demo](https://raw.githubusercontent.com/Sai-Adithya-M/platemate/master/assets/scanner_demo.jpg)
 
 And here is the recipe substitution screen showing how we adapt dinners like Garlic Fettuccine Alfredo with safe swaps for wheat pasta, dairy cream, and butter:
 
-![PlateMate Recipe Substitutions Demo](assets/recipe_demo.jpg)
+![PlateMate Recipe Substitutions Demo](https://raw.githubusercontent.com/Sai-Adithya-M/platemate/master/assets/recipe_demo.jpg)
 
 ### Running it locally
 
 You can run the app directly in your browser without installing anything:
 
 ```bash
-git clone https://github.com/adithya/platemate.git
+git clone https://github.com/Sai-Adithya-M/platemate.git
 cd platemate
 python3 -m http.server 8080
 # Open http://localhost:8080
@@ -51,7 +51,7 @@ python3 -m http.server 8080
 
 The project is open source under the **Apache 2.0** license:
 
-- **Repository**: [https://github.com/adithya/platemate](https://github.com/adithya/platemate)
+- **Repository**: [https://github.com/Sai-Adithya-M/platemate](https://github.com/Sai-Adithya-M/platemate)
 - **Files**:
   - `index.html`: Clean single-page interface with zero heavy framework dependencies.
   - `styles.css`: Dark-mode styles with print formatting for physical dining cards.
