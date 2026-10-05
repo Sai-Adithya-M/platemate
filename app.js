@@ -262,6 +262,33 @@ document.addEventListener('DOMContentLoaded', () => {
   renderRecipeSwap('creamy_pasta');
   renderChefCard('en');
   initOpenAIModel();
+
+  // Handle URL query parameters for automated screenshots
+  const params = new URLSearchParams(window.location.search);
+  const sampleKey = params.get('sample');
+  const tabKey = params.get('tab');
+  const langKey = params.get('lang');
+
+  if (tabKey) {
+    DOM.tabLinks.forEach(b => b.classList.remove('active'));
+    DOM.tabPanes.forEach(p => p.classList.remove('active'));
+    const targetTab = document.querySelector(`.tab-link[data-tab="${tabKey}"]`);
+    const targetPane = document.getElementById(`pane-${tabKey}`);
+    if (targetTab && targetPane) {
+      targetTab.classList.add('active');
+      targetPane.classList.add('active');
+    }
+  }
+
+  if (langKey) {
+    renderChefCard(langKey);
+  }
+
+  if (sampleKey && SAMPLE_PRESETS[sampleKey]) {
+    DOM.ingredientInput.value = SAMPLE_PRESETS[sampleKey];
+    DOM.charCount.textContent = `${SAMPLE_PRESETS[sampleKey].length} characters`;
+    runCheck(SAMPLE_PRESETS[sampleKey]);
+  }
 });
 
 function setupNavigation() {
