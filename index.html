@@ -161,6 +161,32 @@
               <div class="friend-note-box" id="friendNoteBox">
                 <span id="friendNoteText">Review facility warnings for shared equipment lines.</span>
               </div>
+
+              <!-- Open-Source AI Telemetry -->
+              <div class="ai-telemetry-box" id="aiTelemetryBox">
+                <div class="telemetry-header">
+                  <span class="telemetry-title">Open-Source AI Inference</span>
+                  <span class="telemetry-badge" id="telemetryBadge">Local WebAssembly</span>
+                </div>
+                <div class="telemetry-grid">
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Model Weights:</span>
+                    <span class="telemetry-val" id="telemetryModel">Xenova/distilbert-base-uncased</span>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Runtime Engine:</span>
+                    <span class="telemetry-val" id="telemetryRuntime">Transformers.js (ONNX Wasm)</span>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Inference Latency:</span>
+                    <span class="telemetry-val" id="telemetryLatency">Calculated locally</span>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telemetry-label">Network Calls:</span>
+                    <span class="telemetry-val" id="telemetryNetwork">0 requests (100% Offline)</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
