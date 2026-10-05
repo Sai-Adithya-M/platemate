@@ -1,9 +1,9 @@
 /**
- * PlateMate AI - Local Open-Source Food Allergy Guardian
- * Made with love for Elena (Roommate with Celiac & Nut allergies)
+ * PlateMate AI - Local Food Allergy Companion
+ * Built for Elena (Celiac & Nut allergies)
  */
 
-// Open-source biochemical allergen mapping
+// Biochemical allergen mapping
 const ALLERGEN_TAXONOMY = {
   gluten: {
     name: 'Gluten / Wheat',
@@ -35,7 +35,7 @@ const ALLERGEN_TAXONOMY = {
       'buttermilk', 'whey protein', 'whey isolate', 'caseinate', 'sodium caseinate',
       'calcium caseinate', 'lactalbumin', 'curds', 'milk solids', 'nonfat dry milk'
     ],
-    explanation: 'Lactose sensitivity — causes painful stomach aches.'
+    explanation: 'Lactose sensitivity — causes severe digestive distress.'
   },
   peanuts: {
     name: 'Peanuts',
@@ -49,7 +49,7 @@ const ALLERGEN_TAXONOMY = {
     severity: 'medium',
     directTerms: ['soy', 'soya', 'soybean', 'edamame', 'tofu', 'tempeh'],
     covertTerms: ['soy sauce', 'soy lecithin', 'hydrolyzed soy protein', 'miso'],
-    explanation: 'Often hides inside processed emulsifiers.'
+    explanation: 'Common covert ingredient in emulsifiers.'
   },
   shellfish: {
     name: 'Shellfish',
@@ -74,7 +74,7 @@ const ALLERGEN_TAXONOMY = {
   }
 };
 
-// Realistic grocery examples
+// Grocery examples
 const SAMPLE_PRESETS = {
   granola: `Whole grain rolled oats, malted barley syrup, raw almonds, roasted cashews, cane sugar, honey, sunflower lecithin, natural vanilla flavor, sea salt. (Manufactured on shared equipment with wheat and peanuts).`,
   dressing: `Soybean oil, water, cultured lowfat buttermilk, distilled vinegar, egg yolk, salt, modified corn starch, sugar, whey protein concentrate, dehydrated garlic, onion powder, natural flavors (contains wheat), xanthan gum.`,
@@ -82,48 +82,48 @@ const SAMPLE_PRESETS = {
   teriyaki: `Boneless chicken breast, traditional teriyaki glaze [water, soy sauce (water, wheat, soybeans, salt), sugar, mirin, modified food starch, garlic powder, toasted sesame oil, ginger extract].`
 };
 
-// Roommate Safe Recipe Swaps
+// Recipe Substitutions
 const RECIPE_SWAPS = {
   creamy_pasta: {
-    title: '🍝 Creamy Garlic Fettuccine (Elena-Safe)',
-    story: 'Traditional Alfredo is packed with wheat pasta and heavy cream. We make this one for roommate pasta nights with brown-rice pasta and coconut-cauliflower cream so Elena eats the exact same dinner as everyone else.',
+    title: 'Creamy Garlic Fettuccine (Elena-Safe)',
+    story: 'Traditional Alfredo relies on wheat pasta and dairy cream. We adapt this using brown-rice pasta and coconut-cauliflower cream so Elena can share dinner safely.',
     swaps: [
-      { from: 'Durum Wheat Fettuccine', to: 'Quinoa & Brown Rice Fettuccine', reason: 'Cooks al dente, 100% Celiac safe' },
-      { from: 'Heavy Dairy Cream', to: 'Full-Fat Coconut Milk + Nutritional Yeast', reason: 'Zero lactose, perfectly silky' },
+      { from: 'Durum Wheat Fettuccine', to: 'Quinoa & Brown Rice Fettuccine', reason: 'Cooks al dente, Celiac safe' },
+      { from: 'Heavy Dairy Cream', to: 'Full-Fat Coconut Milk + Nutritional Yeast', reason: 'Dairy-free, rich texture' },
       { from: 'Wheat Flour Roux', to: 'Arrowroot or Sweet Rice Starch', reason: 'Smooth thickening with zero gluten' },
-      { from: 'Parmesan Cheese', to: 'Nutritional Yeast & Lemon', reason: 'Captures that savory umami bite' }
+      { from: 'Parmesan Cheese', to: 'Nutritional Yeast & Lemon', reason: 'Savory depth without dairy' }
     ],
-    roommateTip: 'Roommate note: Boil in a clean pot and use Elena\'s dedicated strainer so wheat pasta water never touches her food!'
+    roommateTip: 'Prep note: Boil in a clean pot with Elena\'s dedicated strainer to prevent wheat pasta residue transfer.'
   },
   pesto: {
-    title: '🌿 Nut-Free Fresh Basil Pesto',
-    story: 'Elena loves pesto, but pine nuts and walnuts send her to the ER. We swap in toasted pumpkin seeds for identical crunch and rich buttery flavor.',
+    title: 'Nut-Free Basil Pesto',
+    story: 'Elena loves pesto, but pine nuts and walnuts trigger anaphylaxis. Toasted pumpkin seeds provide the same crunch and buttery flavor.',
     swaps: [
-      { from: 'Pine Nuts / Walnuts', to: 'Toasted Pumpkin Seeds (Pepitas)', reason: 'Crunchy, nutty, and 100% nut-allergy safe' },
-      { from: 'Parmesan Cheese', to: 'Nutritional Yeast + White Miso', reason: 'Savory depth without any dairy' },
-      { from: 'Wheat Pasta', to: 'Chickpea Rotini or Zucchini Noodles', reason: 'Holds the bright green sauce beautifully' }
+      { from: 'Pine Nuts / Walnuts', to: 'Toasted Pumpkin Seeds (Pepitas)', reason: 'Crunchy, nutty, and nut-safe' },
+      { from: 'Parmesan Cheese', to: 'Nutritional Yeast + White Miso', reason: 'Umami depth without dairy' },
+      { from: 'Wheat Pasta', to: 'Chickpea Rotini or Zucchini Noodles', reason: 'Holds sauce well, gluten-free' }
     ],
-    roommateTip: 'Roommate note: Run the blender through a full soap cycle first if you previously made almond smoothies in it.'
+    roommateTip: 'Prep note: Wash blender thoroughly prior to preparation if previously used for nut milks.'
   },
   brownies: {
-    title: '🍫 Fudgy Chocolate Brownies',
-    story: 'Roommate movie nights need brownies. Cassava flour and cocoa powder give an insanely fudgy center without a grain of wheat or chopped nuts.',
+    title: 'Fudgy Chocolate Brownies',
+    story: 'Cassava flour and cocoa powder create a fudgy center without wheat flour or chopped nuts.',
     swaps: [
-      { from: 'All-Purpose Wheat Flour', to: 'Cassava Flour + Cocoa Powder', reason: 'Gooey, rich texture with zero wheat' },
-      { from: 'Chopped Walnuts', to: 'Toasted Buckwheat Groats or Cacao Nibs', reason: 'Satisfying crunch without tree nuts' },
+      { from: 'All-Purpose Wheat Flour', to: 'Cassava Flour + Cocoa Powder', reason: 'Rich texture with zero wheat' },
+      { from: 'Chopped Walnuts', to: 'Toasted Buckwheat Groats or Cacao Nibs', reason: 'Crunch without tree nuts' },
       { from: 'Dairy Butter', to: 'Refined Coconut Oil or Avocado Oil', reason: 'Keeps brownies dense and moist' }
     ],
-    roommateTip: 'Roommate note: Line the pan with fresh parchment paper so it never touches old baking grease.'
+    roommateTip: 'Prep note: Line the pan with fresh parchment paper so it avoids contact with prior baking residue.'
   },
   satay: {
-    title: '🍢 Thai Coconut Chicken Satay',
-    story: 'Instead of peanut sauce and wheat-fermented soy sauce, we make this with sunflower butter and certified gluten-free tamari.',
+    title: 'Thai Coconut Chicken Satay',
+    story: 'Instead of peanut sauce and wheat-fermented soy sauce, this uses sunflower butter and gluten-free tamari.',
     swaps: [
-      { from: 'Peanut Butter Sauce', to: 'Sunflower Seed Butter + Ginger & Lime', reason: 'Creamy, savory, and 100% nut-free' },
-      { from: 'Regular Soy Sauce (Wheat)', to: 'San-J Gluten-Free Tamari / Coconut Aminos', reason: 'Pure fermented soy without wheat' },
-      { from: 'Pre-packaged Curry Paste', to: 'Fresh Lemongrass, Garlic, Turmeric', reason: 'Pure whole spices with no sneaky fillers' }
+      { from: 'Peanut Butter Sauce', to: 'Sunflower Seed Butter + Ginger & Lime', reason: 'Creamy and nut-free' },
+      { from: 'Regular Soy Sauce (Wheat)', to: 'San-J Gluten-Free Tamari / Coconut Aminos', reason: 'Fermented soy without wheat' },
+      { from: 'Pre-packaged Curry Paste', to: 'Fresh Lemongrass, Garlic, Turmeric', reason: 'Pure whole spices' }
     ],
-    roommateTip: 'Roommate note: Use a sheet of foil on the grill grates if cooking outside.'
+    roommateTip: 'Prep note: Use clean foil over shared outdoor grill grates.'
   }
 };
 
@@ -132,7 +132,7 @@ const CHEF_CARDS = {
   en: {
     lang: 'ENGLISH',
     title: 'Severe Food Allergy Notice',
-    message: 'Dear Chef and Server: I have medically diagnosed Celiac Disease (severe gluten allergy) and an anaphylactic Tree Nut allergy. I am also sensitive to dairy. Please help me choose or prepare a safe meal.',
+    message: 'Dear Chef and Server: I have medically diagnosed Celiac Disease (strict gluten-free) and an anaphylactic Tree Nut allergy. I am also sensitive to dairy. Please ensure my meal is prepared safely.',
     avoids: [
       'Wheat, Barley, Rye, Spelt, Semolina, Regular Soy Sauce',
       'Almonds, Walnuts, Cashews, Pistachios, Pecans, Hazelnuts, Pine nuts',
@@ -228,7 +228,6 @@ const DOM = {
   analysisBody: document.getElementById('analysisBody'),
   verdictBadge: document.getElementById('verdictBadge'),
   verdictBanner: document.getElementById('verdictBanner'),
-  verdictEmoji: document.getElementById('verdictEmoji'),
   verdictHeading: document.getElementById('verdictHeading'),
   verdictSubtext: document.getElementById('verdictSubtext'),
   hazardList: document.getElementById('hazardList'),
@@ -290,7 +289,7 @@ function setupEvents() {
     DOM.emptyState.classList.remove('hidden');
     DOM.analysisBody.classList.add('hidden');
     DOM.verdictBadge.className = 'friendly-badge';
-    DOM.verdictBadge.textContent = 'Waiting for ingredients';
+    DOM.verdictBadge.textContent = 'Ready';
   });
 
   DOM.sampleButtons.forEach(btn => {
@@ -351,8 +350,8 @@ function setupEvents() {
 }
 
 function updateFriendUI() {
-  document.querySelector('.personal-title-row h2').textContent = `${state.friend.name}'s Allergy List`;
-  document.getElementById('friendPresetBtn').innerHTML = `<span>👩‍🍳 For ${state.friend.name}</span>`;
+  document.querySelector('.personal-title-row h2').textContent = `${state.friend.name}'s Dietary Profile`;
+  document.getElementById('friendPresetBtn').innerHTML = `<span>Profile: ${state.friend.name}</span>`;
 
   let html = '';
   state.friend.allergens.forEach(key => {
@@ -362,7 +361,7 @@ function updateFriendUI() {
       html += `<span class="tag ${cls}">${tax.name}</span>`;
     }
   });
-  html += `<button class="tag tag-btn" id="editProfileBtnRebound">✏️ Edit list</button>`;
+  html += `<button class="tag tag-btn" id="editProfileBtnRebound">Edit Profile</button>`;
   DOM.activeAllergenChips.innerHTML = html;
 
   document.getElementById('editProfileBtnRebound')?.addEventListener('click', () => {
@@ -375,31 +374,31 @@ function updateFriendUI() {
 async function initOpenAIModel() {
   try {
     if (window.pipeline) {
-      DOM.aiEngineStatus.textContent = 'Loading in-browser Transformers.js...';
+      DOM.aiEngineStatus.textContent = 'Loading local model...';
       await window.pipeline('sentiment-analysis', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english');
-      DOM.aiEngineStatus.textContent = 'Transformers.js Active (100% In-Browser)';
+      DOM.aiEngineStatus.textContent = 'Transformers.js Active (Local)';
     } else {
-      DOM.aiEngineStatus.textContent = 'Local Biochemical AI Engine Active';
+      DOM.aiEngineStatus.textContent = 'Local Biochemical Engine Active';
     }
   } catch (err) {
-    DOM.aiEngineStatus.textContent = 'Local Biochemical AI Engine Active';
+    DOM.aiEngineStatus.textContent = 'Local Biochemical Engine Active';
   }
 }
 
 function analyze() {
   const text = DOM.ingredientInput.value.trim();
   if (!text) {
-    alert('Paste an ingredient label first, or tap one of the quick buttons above!');
+    alert('Please enter ingredient text or select a sample.');
     return;
   }
 
   DOM.analyzeBtn.disabled = true;
-  DOM.analyzeBtn.innerHTML = `<span>Scanning for ${state.friend.name}...</span>`;
+  DOM.analyzeBtn.innerHTML = `<span>Scanning...</span>`;
 
   setTimeout(() => {
     runCheck(text);
     DOM.analyzeBtn.disabled = false;
-    DOM.analyzeBtn.innerHTML = `<span>Check for ${state.friend.name}</span>`;
+    DOM.analyzeBtn.innerHTML = `<span>Scan Ingredients</span>`;
   }, 220);
 }
 
@@ -431,11 +430,11 @@ function runCheck(rawText) {
     allergen.covertTerms.forEach(term => {
       if (lower.includes(term.toLowerCase())) {
         flagged.push({
-          type: 'SNEAKY DERIVATIVE',
+          type: 'CONCEALED DERIVATIVE',
           term: term,
           allergen: allergen.name,
           severity: allergen.severity,
-          msg: `"${term}" is a covert source of ${allergen.name} that many people miss!`
+          msg: `"${term}" is a covert source of ${allergen.name}.`
         });
         if (allergen.severity === 'high') isDanger = true;
         else isCaution = true;
@@ -450,7 +449,7 @@ function runCheck(rawText) {
       term: 'Shared Equipment',
       allergen: 'Cross-Contamination',
       severity: 'medium',
-      msg: 'Package explicitly mentions risk of shared manufacturing lines.'
+      msg: 'Package indicates risk of shared manufacturing lines.'
     });
     isCaution = true;
   }
@@ -465,36 +464,33 @@ function displayVerdict(rawText, flagged, isDanger, isCaution) {
   DOM.verdictBadge.className = 'friendly-badge';
 
   if (!isDanger && !isCaution) {
-    DOM.verdictBadge.textContent = `SAFE FOR ${state.friend.name.toUpperCase()} 🎉`;
+    DOM.verdictBadge.textContent = `CLEAR FOR ${state.friend.name.toUpperCase()}`;
     DOM.verdictBadge.classList.add('badge-safe');
-    DOM.verdictEmoji.textContent = '💚';
-    DOM.verdictHeading.textContent = `Looks great for ${state.friend.name}!`;
-    DOM.verdictSubtext.textContent = `No traces of ${state.friend.allergens.map(a => ALLERGEN_TAXONOMY[a]?.name).join(', ')} were found.`;
-    DOM.friendNoteText.textContent = `Ready to eat! Always keep packaging if dining in a group so she can see for herself.`;
+    DOM.verdictHeading.textContent = `No allergens flagged for ${state.friend.name}`;
+    DOM.verdictSubtext.textContent = `No detected traces of ${state.friend.allergens.map(a => ALLERGEN_TAXONOMY[a]?.name).join(', ')}.`;
+    DOM.friendNoteText.textContent = `Ingredient check passed with zero direct or hidden derivatives found.`;
   } else if (isDanger) {
-    DOM.verdictBadge.textContent = `DO NOT EAT ⛔`;
+    DOM.verdictBadge.textContent = `UNSAFE - DO NOT CONSUME`;
     DOM.verdictBadge.classList.add('badge-danger');
-    DOM.verdictEmoji.textContent = '🚫';
-    DOM.verdictHeading.textContent = `Stop! Unsafe for ${state.friend.name}`;
-    DOM.verdictSubtext.textContent = `Found high-risk ingredients that could trigger an allergic reaction or Celiac flare-up.`;
-    DOM.friendNoteText.textContent = `Do not serve this to ${state.friend.name}. Look for certified allergen-free alternatives.`;
+    DOM.verdictHeading.textContent = `Unsafe for ${state.friend.name}`;
+    DOM.verdictSubtext.textContent = `Contains ingredients known to trigger Elena's active allergens.`;
+    DOM.friendNoteText.textContent = `Do not serve or consume this item.`;
   } else {
-    DOM.verdictBadge.textContent = `CAUTION ⚠️`;
+    DOM.verdictBadge.textContent = `CAUTION`;
     DOM.verdictBadge.classList.add('badge-caution');
-    DOM.verdictEmoji.textContent = '⚠️';
-    DOM.verdictHeading.textContent = `Watch out: Potential risk for ${state.friend.name}`;
-    DOM.verdictSubtext.textContent = `Found shared-equipment warnings or secondary lactose/dairy items.`;
-    DOM.friendNoteText.textContent = `Check whether ${state.friend.name} feels comfortable with shared equipment warnings.`;
+    DOM.verdictHeading.textContent = `Caution: Review Warnings`;
+    DOM.verdictSubtext.textContent = `Contains shared facility warnings or secondary sensitivities.`;
+    DOM.friendNoteText.textContent = `Check whether shared equipment warnings are safe for your level of sensitivity.`;
   }
 
   // Findings list
   if (flagged.length === 0) {
     DOM.hazardList.innerHTML = `
       <div class="finding-item finding-safe">
-        <span class="finding-tag">ALL CLEAR</span>
+        <span class="finding-tag">CLEAR</span>
         <div>
           <strong>No allergen triggers detected</strong>
-          <p style="font-size: 0.78rem; margin-top: 2px;">This product appears clean based on ${state.friend.name}'s active allergy list.</p>
+          <p style="font-size: 0.78rem; margin-top: 2px;">This product contains no flagged ingredients for ${state.friend.name}'s active profile.</p>
         </div>
       </div>
     `;
@@ -531,7 +527,7 @@ function renderRecipeSwap(key) {
 
   DOM.recipeResult.innerHTML = `
     <div class="recipe-card-box">
-      <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.35rem;">${recipe.title}</h4>
+      <h4 style="font-size: 1.05rem; color: #fff; margin-bottom: 0.35rem;">${recipe.title}</h4>
       <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.9rem;">${recipe.story}</p>
       
       <div>
@@ -547,7 +543,7 @@ function renderRecipeSwap(key) {
       </div>
 
       <div class="roommate-tip">
-        <strong>💡 ${recipe.roommateTip}</strong>
+        <strong>${recipe.roommateTip}</strong>
       </div>
     </div>
   `;
@@ -561,7 +557,7 @@ function renderChefCard(lang) {
   DOM.cardTitle.textContent = card.title;
   DOM.cardMessage.textContent = card.message;
   DOM.cardAvoidList.innerHTML = card.avoids.map(i => `<li>${i}</li>`).join('');
-  document.querySelector('.card-signature span').textContent = `For: ${state.friend.name} M. \u2022 Thank you so much for your care!`;
+  document.querySelector('.card-signature span').textContent = `Individual: ${state.friend.name} M. \u2022 Medical Precaution`;
 }
 
 function escapeRegExp(s) {
