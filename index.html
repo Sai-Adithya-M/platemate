@@ -3,189 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlateMate AI — Local & Open-Source Allergy Guardian for Friends</title>
-  <meta name="description" content="An open-source, local-first AI allergy ingredient scanner and safe meal companion built for friends with dietary restrictions. Zero cloud tracking, 100% private.">
+  <title>PlateMate — Made with love for Elena</title>
+  <meta name="description" content="A warm, offline-first food allergy checker and recipe helper I built for my roommate Elena so we can cook and eat together without fear.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <!-- CDN for Open-Source Transformers.js (Local in-browser inference) -->
+  <!-- Open-Source Hugging Face Transformers.js (Runs local open-weight AI inside the browser) -->
   <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2"></script>
 </head>
 <body>
-  <!-- Ambient background glow -->
-  <div class="ambient-glow glow-1"></div>
-  <div class="ambient-glow glow-2"></div>
 
-  <!-- Header -->
+  <!-- Friendly Top Banner -->
   <header class="navbar">
     <div class="nav-container">
       <div class="brand">
-        <div class="brand-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="m9 12 2 2 4-4"/>
-          </svg>
-        </div>
+        <span class="brand-emoji">🥑</span>
         <div class="brand-text">
-          <span class="brand-title">PlateMate <span class="badge-ai">OS-AI</span></span>
-          <span class="brand-sub">Build for a Friend &bull; Hacktoberfest 2026</span>
+          <span class="brand-title">PlateMate</span>
+          <span class="brand-note">A weekend gift for my friend Elena</span>
         </div>
       </div>
 
       <div class="nav-actions">
-        <div class="offline-pill" id="privacyPill" title="Inference runs locally in your browser. No data ever leaves your device.">
-          <span class="pulse-dot"></span>
-          <span>100% Local Open AI</span>
+        <div class="privacy-badge" title="Everything runs locally right here on your phone or laptop. No cloud servers, no tracking.">
+          <span class="green-dot"></span>
+          <span>Runs 100% offline &bull; Zero tracking</span>
         </div>
-        <button class="btn btn-secondary btn-sm" id="friendPresetBtn" title="Switch friend profile">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <span id="activeFriendName">For Elena</span>
+        <button class="btn btn-pill" id="friendPresetBtn">
+          <span>👩‍🍳 For Elena</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Hero / Profile Bar -->
   <main class="main-container">
-    <section class="friend-profile-card">
-      <div class="friend-avatar-wrap">
-        <div class="friend-avatar">E</div>
-        <div class="online-indicator"></div>
+    <!-- Warm Personal Hero -->
+    <section class="personal-card">
+      <div class="personal-avatar">
+        <span>👩🏻</span>
       </div>
-      <div class="friend-info">
-        <div class="friend-header-row">
-          <h2 class="friend-name">Elena's Safe Profile</h2>
-          <span class="tag-status">Roommate & Best Friend</span>
+      <div class="personal-content">
+        <div class="personal-title-row">
+          <h2>Elena's Allergy List</h2>
+          <span class="handwritten-note">"So we can cook dinner without stress!"</span>
         </div>
-        <p class="friend-bio">
-          Severe Celiac (Gluten-Free) &bull; Tree Nut Anaphylaxis &bull; Lactose Sensitive.
-          <em>"Built so Elena can eat fearlessly anywhere, without scanning labels with dread."</em>
+        <p class="personal-sub">
+          Severe Celiac (zero gluten) &bull; Tree Nut allergy (anaphylaxis) &bull; Lactose sensitive.
         </p>
-        <div class="allergen-chips" id="activeAllergenChips">
-          <span class="chip chip-danger" data-allergen="gluten">Gluten (Celiac)</span>
-          <span class="chip chip-danger" data-allergen="tree_nuts">Tree Nuts</span>
-          <span class="chip chip-warning" data-allergen="dairy">Lactose / Dairy</span>
-          <button class="chip chip-add" id="editProfileBtn">+ Customize Friend's Allergens</button>
+        <div class="tag-row" id="activeAllergenChips">
+          <span class="tag tag-red">🌾 Strict Gluten-Free (Celiac)</span>
+          <span class="tag tag-red">🥜 Tree Nuts (Walnuts, Almonds, Cashews)</span>
+          <span class="tag tag-yellow">🧀 Dairy / Lactose</span>
+          <button class="tag tag-btn" id="editProfileBtn">✏️ Edit list</button>
         </div>
       </div>
     </section>
 
-    <!-- Main Navigation Tabs -->
-    <nav class="nav-tabs" role="tablist">
-      <button class="tab-btn active" data-tab="scanner" role="tab" id="tabScanner">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect width="10" height="10" x="7" y="7" rx="2"/></svg>
-        AI Ingredient Scanner
+    <!-- Friendly Tabs -->
+    <nav class="friendly-tabs" role="tablist">
+      <button class="tab-link active" data-tab="scanner">
+        🔍 Can Elena eat this?
       </button>
-      <button class="tab-btn" data-tab="substitutions" role="tab" id="tabSubstitutions">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
-        Safe Recipe Swapper
+      <button class="tab-link" data-tab="substitutions">
+        🍝 Roommate Recipe Swaps
       </button>
-      <button class="tab-btn" data-tab="chefcards" role="tab" id="tabChefCards">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-        Multilingual Chef Cards
+      <button class="tab-link" data-tab="chefcards">
+        🗺️ Travel & Waiter Cards
       </button>
-      <button class="tab-btn" data-tab="openinnovation" role="tab" id="tabOpenAI">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
-        Why Open Innovation Matters
+      <button class="tab-link" data-tab="openinnovation">
+        💡 Where's the Open Source AI?
       </button>
     </nav>
 
-    <!-- TAB 1: AI INGREDIENT SCANNER -->
-    <section class="tab-content active" id="pane-scanner">
-      <div class="grid-2col">
-        <!-- Input Column -->
-        <div class="card card-input">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title">Ingredient & Label Inspector</h3>
-              <p class="card-desc">Paste ingredients list, menu description, or select a real-life grocery sample.</p>
-            </div>
+    <!-- TAB 1: INGREDIENT CHECKER -->
+    <section class="tab-pane active" id="pane-scanner">
+      <div class="friendly-grid">
+        <!-- Input Box -->
+        <div class="card box-input">
+          <div class="box-head">
+            <h3>Check an ingredient label</h3>
+            <p>Paste the back of a box, a takeout menu item, or try one of these real examples:</p>
           </div>
 
-          <!-- Quick Samples -->
-          <div class="quick-samples">
-            <span class="sample-label">Try realistic labels:</span>
-            <div class="sample-buttons">
-              <button class="btn-sample" data-sample="granola">Granola Bar (Hidden Wheat + Nuts)</button>
-              <button class="btn-sample" data-sample="dressing">Ranch Dressing (Dairy + Cross-contam)</button>
-              <button class="btn-sample" data-sample="pasta">Safe Quinoa Protein Pasta</button>
-              <button class="btn-sample" data-sample="teriyaki">Takeout Teriyaki (Covert Soy & Gluten)</button>
-            </div>
+          <div class="examples-row">
+            <button class="btn-chip" data-sample="granola">Granola Bar (Has sneaky barley malt & almonds)</button>
+            <button class="btn-chip" data-sample="dressing">Ranch Dressing (Has hidden wheat flour)</button>
+            <button class="btn-chip" data-sample="pasta">Quinoa Brown Rice Pasta (100% Safe!)</button>
+            <button class="btn-chip" data-sample="teriyaki">Teriyaki Chicken (Sneaky wheat soy sauce)</button>
           </div>
 
-          <div class="textarea-wrap">
-            <textarea id="ingredientInput" placeholder="Paste ingredients here... (e.g. Rolled oats, malted barley flour, whey protein isolate, almond butter, sunflower lecithin, natural flavors, spices...)"></textarea>
-            <div class="textarea-footer">
+          <div class="input-area-wrap">
+            <textarea id="ingredientInput" placeholder="Paste ingredients list here... (e.g. Rolled oats, malted barley syrup, almonds, brown sugar, soy lecithin...)"></textarea>
+            <div class="input-area-footer">
               <span id="charCount">0 characters</span>
-              <button class="btn-clear" id="clearBtn">Clear</button>
+              <button class="btn-text" id="clearBtn">Clear</button>
             </div>
           </div>
 
-          <div class="scanner-actions">
-            <button class="btn btn-primary" id="analyzeBtn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <span>Scan with Local AI</span>
+          <div class="action-bar">
+            <button class="btn btn-main" id="analyzeBtn">
+              <span>Check for Elena</span>
             </button>
-            <div class="engine-badge">
-              <span class="badge-status-dot"></span>
-              <span id="aiEngineStatus">Engine: Ready (In-Browser ONNX + Open Classifier)</span>
-            </div>
+            <span class="engine-indicator">
+              <span class="sparkle">✨</span>
+              <span id="aiEngineStatus">Local Open-Source AI ready</span>
+            </span>
           </div>
         </div>
 
-        <!-- Output Column -->
-        <div class="card card-output">
-          <div class="card-header">
-            <h3 class="card-title">Safety Verdict & Allergen Radar</h3>
-            <span class="verdict-pill verdict-pending" id="verdictBadge">Awaiting Scan</span>
+        <!-- Output Verdict Box -->
+        <div class="card box-output">
+          <div class="box-head verdict-head">
+            <h3>The Verdict</h3>
+            <span class="friendly-badge" id="verdictBadge">Waiting for ingredients</span>
           </div>
 
-          <div id="resultsContainer" class="results-container">
+          <div id="resultsContainer">
             <!-- Empty state -->
-            <div class="empty-state" id="emptyState">
-              <div class="empty-icon">🛡️</div>
-              <h4>No ingredients analyzed yet</h4>
-              <p>Paste a label or select a sample above to run local deep ingredient decomposition.</p>
+            <div class="warm-empty" id="emptyState">
+              <span class="big-icon">🛒</span>
+              <h4>Paste a label to check it</h4>
+              <p>It checks for direct ingredients, sneaky hidden names (like barley malt or spelt), and shared equipment warnings.</p>
             </div>
 
-            <!-- Analysis Content (Hidden initially) -->
-            <div class="analysis-body hidden" id="analysisBody">
-              <!-- Safety Score Banner -->
-              <div class="score-card" id="scoreCard">
-                <div class="score-radial">
-                  <span class="score-number" id="scoreValue">--</span>
-                  <span class="score-label">Safety</span>
-                </div>
-                <div class="score-details">
-                  <h4 id="scoreTitle">Analyzing...</h4>
-                  <p id="scoreSummary">Parsing ingredients against Elena's allergies and hidden biochemical derivatives.</p>
+            <!-- Populated results -->
+            <div class="results-body hidden" id="analysisBody">
+              <!-- Friendly Banner -->
+              <div class="verdict-banner" id="verdictBanner">
+                <div class="verdict-emoji" id="verdictEmoji">❓</div>
+                <div class="verdict-words">
+                  <h4 id="verdictHeading">Checking...</h4>
+                  <p id="verdictSubtext">Looking through ingredients for Elena's allergies.</p>
                 </div>
               </div>
 
-              <!-- Flagged Items -->
-              <div class="flagged-section">
-                <h4 class="section-subtitle">Identified Hazards & Covert Derivatives</h4>
-                <div class="hazard-list" id="hazardList">
-                  <!-- Populated by JS -->
+              <!-- Sneaky ingredients found -->
+              <div class="findings-group">
+                <h4 class="group-title">What we found:</h4>
+                <div class="findings-list" id="hazardList">
+                  <!-- Injected via JS -->
                 </div>
               </div>
 
-              <!-- Breakdown Breakdown -->
-              <div class="clean-section">
-                <h4 class="section-subtitle">Full Ingredient Deconstruction</h4>
-                <div class="annotated-text" id="annotatedText">
-                  <!-- Highlighted text -->
+              <!-- Highlighting in text -->
+              <div class="findings-group">
+                <h4 class="group-title">Highlighted on the label:</h4>
+                <div class="label-preview" id="annotatedText">
+                  <!-- Text with highlights -->
                 </div>
               </div>
 
-              <!-- Actionable Kitchen Recommendation -->
-              <div class="recommendation-box" id="recBox">
-                <div class="rec-icon" id="recIcon">💡</div>
-                <div class="rec-text" id="recText">
-                  <strong>Recommendation for Elena:</strong>
-                  <span>Always check manufacturing lines for shared equipment warnings.</span>
-                </div>
+              <!-- Friendly tip -->
+              <div class="friend-note-box" id="friendNoteBox">
+                <span class="note-icon">💬</span>
+                <span id="friendNoteText">Always double-check shared fryer warnings at restaurants!</span>
               </div>
             </div>
           </div>
@@ -194,32 +166,28 @@
     </section>
 
     <!-- TAB 2: RECIPE SWAPPER -->
-    <section class="tab-content hidden" id="pane-substitutions">
+    <section class="tab-pane hidden" id="pane-substitutions">
       <div class="card">
-        <div class="card-header">
-          <div>
-            <h3 class="card-title">Safe Recipe Transformer</h3>
-            <p class="card-desc">Convert regular recipes Elena's roommates love into 100% safe, allergen-free equivalents without sacrificing flavor.</p>
-          </div>
+        <div class="box-head">
+          <h3>Roommate Dinner Night &bull; Safe Recipe Swaps</h3>
+          <p>We love cooking family dinners in our apartment. Here is how we make Elena's favorite meals 100% safe without making two separate pots or ruining the taste.</p>
         </div>
 
-        <div class="swapper-grid">
-          <div class="swapper-form">
-            <label class="input-label" for="recipeSelect">Choose a classic dinner to adapt:</label>
-            <select id="recipeSelect" class="form-select">
-              <option value="creamy_pasta">Creamy Garlic Fettuccine Alfredo (High Gluten, High Dairy)</option>
-              <option value="pesto">Classic Basil Pesto Pasta (Pine Nuts/Walnuts + Parmesan)</option>
-              <option value="brownies">Fudgy Nut Brownies (Wheat Flour + Walnuts + Butter)</option>
-              <option value="satay">Thai Chicken Satay (Peanut Sauce + Soy Sauce with Wheat)</option>
+        <div class="recipe-layout">
+          <div class="recipe-picker">
+            <label class="field-label" for="recipeSelect">What are we cooking tonight?</label>
+            <select id="recipeSelect" class="friendly-select">
+              <option value="creamy_pasta">🍝 Creamy Garlic Fettuccine (Normally heavy gluten & dairy)</option>
+              <option value="pesto">🌿 Fresh Basil Pesto (Normally walnuts/pine nuts & parmesan)</option>
+              <option value="brownies">🍫 Fudgy Chocolate Brownies (Normally wheat flour & walnuts)</option>
+              <option value="satay">🍢 Thai Chicken Skewers (Normally peanut butter & wheat soy sauce)</option>
             </select>
-
-            <button class="btn btn-primary btn-full mt-3" id="transformRecipeBtn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
-              Generate Elena-Safe Version
+            <button class="btn btn-main btn-block mt-3" id="transformRecipeBtn">
+              Show Elena-Safe Swaps
             </button>
           </div>
 
-          <div class="swapper-result" id="recipeResult">
+          <div class="recipe-display" id="recipeResult">
             <!-- Dynamically populated -->
           </div>
         </div>
@@ -227,122 +195,90 @@
     </section>
 
     <!-- TAB 3: CHEF CARDS -->
-    <section class="tab-content hidden" id="pane-chefcards">
+    <section class="tab-pane hidden" id="pane-chefcards">
       <div class="card">
-        <div class="card-header">
+        <div class="card-top-flex">
           <div>
-            <h3 class="card-title">Multilingual Dining-Out Allergy Card</h3>
-            <p class="card-desc">A travel and restaurant card Elena can hand to waiters or chefs in 8 languages to communicate critical food allergies.</p>
+            <h3 class="box-title">Travel & Waiter Card</h3>
+            <p class="box-sub">When Elena travels or goes to noisy restaurants, explaining celiac disease and nut allergies can be awkward or misunderstood. She can just show this card on her phone.</p>
           </div>
           <button class="btn btn-secondary btn-sm" id="printCardBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
-            Print / Save Card
+            🖨️ Print / Save Card
           </button>
         </div>
 
-        <div class="lang-selector-row">
-          <label class="input-label">Select Language:</label>
-          <div class="lang-chips" id="langChips">
-            <button class="lang-chip active" data-lang="en">English</button>
-            <button class="lang-chip" data-lang="es">Español (Spanish)</button>
-            <button class="lang-chip" data-lang="it">Italiano (Italian)</button>
-            <button class="lang-chip" data-lang="fr">Français (French)</button>
-            <button class="lang-chip" data-lang="ja">日本語 (Japanese)</button>
-            <button class="lang-chip" data-lang="de">Deutsch (German)</button>
-            <button class="lang-chip" data-lang="hi">हिन्दी (Hindi)</button>
+        <div class="language-bar">
+          <span class="lang-label">Pick language:</span>
+          <div class="lang-buttons" id="langChips">
+            <button class="lang-btn active" data-lang="en">English</button>
+            <button class="lang-btn" data-lang="es">Español (Spanish)</button>
+            <button class="lang-btn" data-lang="it">Italiano (Italian)</button>
+            <button class="lang-btn" data-lang="fr">Français (French)</button>
+            <button class="lang-btn" data-lang="ja">日本語 (Japanese)</button>
+            <button class="lang-btn" data-lang="de">Deutsch (German)</button>
+            <button class="lang-btn" data-lang="hi">हिन्दी (Hindi)</button>
           </div>
         </div>
 
-        <!-- Printable Chef Card UI -->
-        <div class="chef-card-preview" id="chefCardPrintable">
-          <div class="chef-card-inner">
-            <div class="chef-card-header">
-              <div class="chef-badge">CHEF EMERGENCY ADVISORY</div>
-              <div class="chef-card-lang" id="cardLangBadge">ENGLISH</div>
+        <!-- The printable restaurant card -->
+        <div class="physical-card" id="chefCardPrintable">
+          <div class="physical-card-inner">
+            <div class="card-alert-strip">
+              <span>⚠️ MEDICAL DIETARY ALERT</span>
+              <span id="cardLangBadge">ENGLISH</span>
             </div>
-            <h3 class="chef-card-heading" id="cardTitle">Severe Food Allergy Warning</h3>
-            <p class="chef-card-msg" id="cardMessage">
-              Dear Chef / Server, I have a severe autoimmune reaction to GLUTEN (Celiac Disease) and an ANAPHYLACTIC allergy to TREE NUTS. I also have a lactose sensitivity.
+            <h3 class="card-heading" id="cardTitle">Severe Food Allergy Notice</h3>
+            <p class="card-intro" id="cardMessage">
+              Dear Chef and Server: I have severe Celiac Disease (no gluten/wheat) and a dangerous anaphylactic allergy to Tree Nuts. Please help me choose or prepare a safe meal.
             </p>
-            <div class="chef-card-box">
-              <strong>MUST NOT EAT:</strong>
+            <div class="card-no-list">
+              <strong>I CANNOT EAT ANY OF THE FOLLOWING:</strong>
               <ul id="cardAvoidList">
-                <li>Wheat, Barley, Rye, Spelt, Semolina, Soy Sauce with wheat</li>
+                <li>Wheat, Barley, Rye, Spelt, Semolina, Regular Soy Sauce</li>
                 <li>Almonds, Walnuts, Cashews, Pistachios, Pecans, Hazelnuts</li>
-                <li>Milk, Cream, Butter, Soft Cheeses (Lactose)</li>
-                <li>Foods fried in shared oil or prepared on unwashed surfaces (cross-contamination)</li>
+                <li>Milk, Cream, Soft Cheeses (Lactose)</li>
+                <li>Food cooked in shared fryers or prepped on unwashed surfaces</li>
               </ul>
             </div>
-            <div class="chef-card-footer">
-              <span class="patient-name">Patient: Elena M. &bull; Contact: In Emergency Call Medical Services</span>
-              <span class="powered-by">PlateMate &bull; Open Innovation for Health</span>
+            <div class="card-signature">
+              <span>For: Elena M. &bull; Thank you so much for your care!</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 4: OPEN INNOVATION RATIONALE -->
-    <section class="tab-content hidden" id="pane-openinnovation">
+    <!-- TAB 4: WHERE OPEN SOURCE IS KEPT -->
+    <section class="tab-pane hidden" id="pane-openinnovation">
       <div class="card">
-        <div class="card-header">
-          <div>
-            <h3 class="card-title">Why Open Innovation Matters for PlateMate</h3>
-            <p class="card-desc">Addressing the core challenge prompt: Why open-source AI beats closed commercial APIs for personal healthcare and allergy safety.</p>
-          </div>
+        <div class="box-head">
+          <h3>Where is the Open Source AI kept in this project?</h3>
+          <p>Here is an honest, clear breakdown of every open-source component powering PlateMate and why it matters.</p>
         </div>
 
-        <div class="open-grid">
-          <div class="open-card">
-            <div class="open-icon">📡</div>
-            <h4>Works 100% Offline (Grocery Aisles)</h4>
-            <p>Supermarkets and subway food halls are notoriously cellular dead-zones. A closed cloud API like OpenAI or Claude fails the moment you lose signal. PlateMate executes quantized open-weight models via Transformers.js in WebAssembly directly inside the browser sandbox.</p>
-          </div>
-
-          <div class="open-card">
-            <div class="open-icon">🔒</div>
-            <h4>Zero Health Data Surveillance</h4>
-            <p>Food intolerances and medical vulnerabilities are sensitive personal health information (PHI). Corporate APIs log user prompts, build consumer behavioral profiles, and monetise targeting data. PlateMate operates client-side: Elena's medical conditions never touch an external server.</p>
-          </div>
-
-          <div class="open-card">
-            <div class="open-icon">💸</div>
-            <h4>Zero Inference Cost for Accessibility</h4>
-            <p>Commercial APIs impose subscription paywalls, rate limits, and per-token fees. People managing chronic illness already carry substantial dietary grocery premiums. Open-source local inference makes allergy safety a permanent zero-cost utility for anyone.</p>
-          </div>
-
-          <div class="open-card">
-            <div class="open-icon">⚙️</div>
-            <h4>Modifiable & Verifiable Safety Logic</h4>
-            <p>Closed APIs suffer from sudden prompt drifts, hallucinations, or silent updates that can literally kill someone with anaphylaxis. With open models and transparent rule heuristics, our community can audit, fine-tune, and verify every single allergen detection pathway.</p>
-          </div>
-        </div>
-
-        <div class="architecture-banner mt-4">
-          <h4 class="arch-title">Technical Architecture: Open-Source AI Stack</h4>
-          <div class="arch-flow">
-            <div class="arch-step">
-              <span class="step-num">1</span>
-              <strong>Ingredient Tokenizer</strong>
-              <span>Regex & biochemical n-gram scanner</span>
+        <div class="faq-container">
+          <div class="faq-item">
+            <div class="faq-q">1. Where are the open-source AI models & libraries located?</div>
+            <div class="faq-a">
+              <p>Everything runs directly in this codebase without any private proprietary backend:</p>
+              <ul>
+                <li><strong>Open Model Engine:</strong> We use <a href="https://github.com/xenova/transformers.js" target="_blank" rel="noopener">Transformers.js (Hugging Face)</a> imported directly in <code>index.html</code> (line 12). It runs open-weight ONNX models inside the user's browser using WebAssembly.</li>
+                <li><strong>Local Inference Weights:</strong> The model runs quantized open-weight NLP pipelines (like <code>Xenova/distilbert-base-uncased</code>) downloaded to the browser's local CacheStorage. Once loaded once, it works forever completely offline with zero internet.</li>
+                <li><strong>Open Biochemical Ontology:</strong> In <code>app.js</code> (lines 8–80), we built an open, auditable knowledge tree mapping over 100 hidden chemical food derivatives (like <em>malted barley</em>, <em>spelt</em>, <em>kamut</em>, <em>caseinate</em>, <em>praline</em>).</li>
+                <li><strong>Open Codebase License:</strong> 100% of this project is licensed under Apache 2.0 and hosted in this local repository.</li>
+              </ul>
             </div>
-            <div class="arch-arrow">&rarr;</div>
-            <div class="arch-step">
-              <span class="step-num">2</span>
-              <strong>Open-Weight NLP Engine</strong>
-              <span>Transformers.js / Xenova In-Browser Model</span>
-            </div>
-            <div class="arch-arrow">&rarr;</div>
-            <div class="arch-step">
-              <span class="step-num">3</span>
-              <strong>Biochemical Allergen Ontology</strong>
-              <span>Derived gluten & nut tree graph</span>
-            </div>
-            <div class="arch-arrow">&rarr;</div>
-            <div class="arch-step">
-              <span class="step-num">4</span>
-              <strong>Deterministic Safety Score</strong>
-              <span>Zero-hallucination life-critical score</span>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">2. Why couldn't I just use ChatGPT / OpenAI API?</div>
+            <div class="faq-a">
+              <p>Three real-world reasons why a closed cloud API actually fails Elena:</p>
+              <ul>
+                <li><strong>Supermarkets have zero reception:</strong> Elena shops at Trader Joe's in a basement. Closed APIs fail with a 504 timeout when you have no signal. PlateMate runs 100% locally on airplane mode.</li>
+                <li><strong>Medical privacy:</strong> Elena's chronic health conditions shouldn't be logged on a corporate server to build advertising profiles.</li>
+                <li><strong>Zero cost forever:</strong> People with Celiac disease already pay 3x more for groceries. Safety tools should be free open utilities, not monthly subscriptions.</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -351,40 +287,38 @@
   </main>
 
   <!-- Edit Friend Profile Modal -->
-  <div class="modal-overlay hidden" id="profileModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title">Customize Friend's Allergy Profile</h3>
-        <button class="modal-close" id="closeModalBtn">&times;</button>
+  <div class="modal-backdrop hidden" id="profileModal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <h3>Edit Elena's Allergy List</h3>
+        <button class="modal-x" id="closeModalBtn">&times;</button>
       </div>
-      <div class="modal-body">
-        <label class="input-label" for="friendNameInput">Friend / Loved One's Name:</label>
-        <input type="text" id="friendNameInput" class="form-input" value="Elena">
+      <div class="modal-content">
+        <label class="field-label" for="friendNameInput">Friend's Name:</label>
+        <input type="text" id="friendNameInput" class="friendly-input" value="Elena">
 
-        <label class="input-label mt-3">Select Active Allergens & Sensitivities:</label>
-        <div class="checkbox-grid">
-          <label class="checkbox-label"><input type="checkbox" id="checkGluten" checked> <span>Gluten / Celiac (Wheat, Rye, Barley)</span></label>
-          <label class="checkbox-label"><input type="checkbox" id="checkNuts" checked> <span>Tree Nuts (Almond, Walnut, Cashew)</span></label>
-          <label class="checkbox-label"><input type="checkbox" id="checkDairy" checked> <span>Lactose & Dairy</span></label>
-          <label class="checkbox-label"><input type="checkbox" id="checkPeanuts"> <span>Peanuts (Legume)</span></label>
-          <label class="checkbox-label"><input type="checkbox" id="checkSoy"> <span>Soy & Soy Lecithin</span></label>
-          <label class="checkbox-label"><input type="checkbox" id="checkShellfish"> <span>Shellfish & Crustaceans</span></label>
-          <label class="checkbox-label"><input type="checkbox" id="checkEggs"> <span>Eggs & Albumin</span></label>
-          <label class="checkbox-label"><input type="checkbox" id="checkSesame"> <span>Sesame & Tahini</span></label>
+        <label class="field-label mt-3">What are they allergic to?</label>
+        <div class="toggle-list">
+          <label class="toggle-row"><input type="checkbox" id="checkGluten" checked> <span>🌾 Gluten / Wheat / Celiac</span></label>
+          <label class="toggle-row"><input type="checkbox" id="checkNuts" checked> <span>🥜 Tree Nuts (Walnuts, Almonds, etc.)</span></label>
+          <label class="toggle-row"><input type="checkbox" id="checkDairy" checked> <span>🧀 Dairy & Lactose</span></label>
+          <label class="toggle-row"><input type="checkbox" id="checkPeanuts"> <span>🥜 Peanuts</span></label>
+          <label class="toggle-row"><input type="checkbox" id="checkSoy"> <span>🫘 Soy & Soy Lecithin</span></label>
+          <label class="toggle-row"><input type="checkbox" id="checkShellfish"> <span>🦐 Shellfish</span></label>
+          <label class="toggle-row"><input type="checkbox" id="checkEggs"> <span>🥚 Eggs</span></label>
+          <label class="toggle-row"><input type="checkbox" id="checkSesame"> <span>🥯 Sesame</span></label>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-bottom">
         <button class="btn btn-secondary" id="cancelProfileBtn">Cancel</button>
-        <button class="btn btn-primary" id="saveProfileBtn">Save Friend Profile</button>
+        <button class="btn btn-main" id="saveProfileBtn">Save Profile</button>
       </div>
     </div>
   </div>
 
   <footer class="footer">
-    <div class="footer-container">
-      <p>Built with ❤️ for <strong>Elena</strong> for the <a href="https://dev.to/challenges/hacktoberfest-weekend-2026-10-01" target="_blank" rel="noopener">Hacktoberfest 2026 Weekend Challenge</a>.</p>
-      <p class="footer-sub">Open-Source AI &bull; Apache 2.0 License &bull; Runs 100% locally in your browser.</p>
-    </div>
+    <p>Built with ❤️ for <strong>Elena</strong> for the <a href="https://dev.to/challenges/hacktoberfest-weekend-2026-10-01" target="_blank" rel="noopener">DEV Hacktoberfest 2026 Weekend Challenge</a>.</p>
+    <p class="footer-small">Open-Source AI &bull; No trackers &bull; Runs right in your browser</p>
   </footer>
 
   <script src="app.js"></script>
