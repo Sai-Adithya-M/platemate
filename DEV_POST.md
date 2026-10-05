@@ -28,11 +28,15 @@ So this weekend, I built **PlateMate**:
 
 Here is the ingredient scanner in action, catching hidden barley malt and tree nuts on a granola bar label:
 
-![PlateMate Ingredient Scanner Demo](https://raw.githubusercontent.com/Sai-Adithya-M/platemate/master/assets/scanner_demo.jpg)
+![PlateMate Ingredient Scanner Demo](https://raw.githubusercontent.com/Sai-Adithya-M/platemate/master/assets/scanner_demo.png?v=2)
 
 And here is the recipe substitution screen showing how we adapt dinners like Garlic Fettuccine Alfredo with safe swaps for wheat pasta, dairy cream, and butter:
 
-![PlateMate Recipe Substitutions Demo](https://raw.githubusercontent.com/Sai-Adithya-M/platemate/master/assets/recipe_demo.jpg)
+![PlateMate Recipe Substitutions Demo](https://raw.githubusercontent.com/Sai-Adithya-M/platemate/master/assets/recipe_demo.png?v=2)
+
+And here is the multilingual dining card generated for traveling and restaurant waitstaff:
+
+![PlateMate Multilingual Dining Card Demo](https://raw.githubusercontent.com/Sai-Adithya-M/platemate/master/assets/card_demo.png?v=2)
 
 ### Running it locally
 
